@@ -18,34 +18,8 @@ describe('Mocha', function() {
 
   describe('constructor', function() {
     beforeEach(function() {
-      sandbox.stub(Mocha.prototype, 'useColors').returnsThis();
-      sandbox.stub(utils, 'deprecate');
       sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
       sandbox.stub(Mocha.prototype, 'globals').returnsThis();
-    });
-
-    describe('when "useColors" option is defined', function() {
-      it('should prefer "color" over "useColors"', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({useColors: true, color: false});
-        expect(Mocha.prototype.useColors, 'to have a call satisfying', [
-          false
-        ]).and('was called once');
-      });
-
-      it('should assign "useColors" to "color"', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({useColors: true});
-        expect(Mocha.prototype.useColors, 'to have a call satisfying', [
-          true
-        ]).and('was called once');
-      });
-
-      it('should call utils.deprecate()', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({useColors: true});
-        expect(utils.deprecate, 'was called once');
-      });
     });
 
     describe('when "timeout" option is `undefined`', function() {
@@ -73,34 +47,6 @@ describe('Mocha', function() {
         expect(Mocha.prototype.globals, 'to have a call satisfying', [
           ['singular']
         ]).and('was called once');
-      });
-      it('should delete mocha.options.global', function() {
-        var mocha = new Mocha({global: ['singular']});
-        expect(mocha.options.global, 'to be', undefined);
-      });
-    });
-
-    describe('when "options.globals" is provided', function() {
-      it('should pass "options.globals" to #globals()', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({globals: ['plural']});
-        expect(Mocha.prototype.globals, 'to have a call satisfying', [
-          ['plural']
-        ]).and('was called once');
-      });
-    });
-
-    describe('when "options.global" AND "options.globals" are provided', function() {
-      it('should pass "options.global" to #globals(), ignoring "options.globals"', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({global: ['singular'], globals: ['plural']});
-        expect(Mocha.prototype.globals, 'to have a call satisfying', [
-          ['singular']
-        ]).and('was called once');
-      });
-      it('should delete mocha.options.global', function() {
-        var mocha = new Mocha({global: ['singular'], globals: ['plural']});
-        expect(mocha.options.global, 'to be', undefined);
       });
     });
   });
@@ -173,7 +119,7 @@ describe('Mocha', function() {
   describe('#globals()', function() {
     it('should be an empty array initially', function() {
       var mocha = new Mocha();
-      expect(mocha.options.globals, 'to be empty');
+      expect(mocha.options.global, 'to be empty');
     });
 
     it('should be chainable', function() {
@@ -185,13 +131,13 @@ describe('Mocha', function() {
       it('should not modify the whitelist when given empty string', function() {
         var mocha = new Mocha(opts);
         mocha.globals('');
-        expect(mocha.options.globals, 'to be empty');
+        expect(mocha.options.global, 'to be empty');
       });
 
       it('should not modify the whitelist when given empty array', function() {
         var mocha = new Mocha(opts);
         mocha.globals([]);
-        expect(mocha.options.globals, 'to be empty');
+        expect(mocha.options.global, 'to be empty');
       });
     });
 
@@ -203,24 +149,24 @@ describe('Mocha', function() {
       it('should add string to the whitelist', function() {
         var mocha = new Mocha(opts);
         mocha.globals(elem);
-        expect(mocha.options.globals, 'to contain', elem);
-        expect(mocha.options.globals, 'to have length', 1);
+        expect(mocha.options.global, 'to contain', elem);
+        expect(mocha.options.global, 'to have length', 1);
       });
 
       it('should add contents of string array to the whitelist', function() {
         var mocha = new Mocha(opts);
         var elems = [elem, elem2];
         mocha.globals(elems);
-        expect(mocha.options.globals, 'to contain', elem, elem2);
-        expect(mocha.options.globals, 'to have length', elems.length);
+        expect(mocha.options.global, 'to contain', elem, elem2);
+        expect(mocha.options.global, 'to have length', elems.length);
       });
 
       it('should not have duplicates', function() {
         var mocha = new Mocha({globals: [elem, elem2]});
         var elems = [elem, elem2, elem3];
         mocha.globals(elems);
-        expect(mocha.options.globals, 'to contain', elem, elem2, elem3);
-        expect(mocha.options.globals, 'to have length', elems.length);
+        expect(mocha.options.global, 'to contain', elem, elem2, elem3);
+        expect(mocha.options.global, 'to have length', elems.length);
       });
     });
   });
@@ -358,22 +304,22 @@ describe('Mocha', function() {
   });
 
   describe('#useInlineDiffs()', function() {
-    it('should set the useInlineDiffs option to true when param equals true', function() {
+    it('should set the inlineDiffs option to true when param equals true', function() {
       var mocha = new Mocha(opts);
       mocha.useInlineDiffs(true);
-      expect(mocha.options, 'to have property', 'useInlineDiffs', true);
+      expect(mocha.options, 'to have property', 'inlineDiffs', true);
     });
 
-    it('should set the useInlineDiffs option to false when param equals false', function() {
+    it('should set the inlineDiffs option to false when param equals false', function() {
       var mocha = new Mocha(opts);
       mocha.useInlineDiffs(false);
-      expect(mocha.options, 'to have property', 'useInlineDiffs', false);
+      expect(mocha.options, 'to have property', 'inlineDiffs', false);
     });
 
-    it('should set the useInlineDiffs option to false when the param is undefined', function() {
+    it('should set the inlineDiffs option to false when the param is undefined', function() {
       var mocha = new Mocha(opts);
       mocha.useInlineDiffs();
-      expect(mocha.options, 'to have property', 'useInlineDiffs', false);
+      expect(mocha.options, 'to have property', 'inlineDiffs', false);
     });
 
     it('should be chainable', function() {
