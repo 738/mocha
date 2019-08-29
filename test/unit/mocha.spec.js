@@ -103,6 +103,19 @@ describe('Mocha', function() {
     });
   });
 
+  describe('#enableTimeouts()', function() {
+    it('should set the suite._enableTimeouts to true if no argument', function() {
+      var mocha = new Mocha(opts);
+      mocha.enableTimeouts();
+      expect(mocha.suite._enableTimeouts, 'to be', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.enableTimeouts(), 'to be', mocha);
+    });
+  });
+
   describe('#fullTrace()', function() {
     it('should set the fullStackTrace option to true', function() {
       var mocha = new Mocha(opts);
@@ -300,6 +313,25 @@ describe('Mocha', function() {
           }
         }, 'not to throw');
       });
+    });
+  });
+
+  describe('#useColors()', function() {
+    it('should set the color option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.useColors(true);
+      expect(mocha.options, 'to have property', 'color', true);
+    });
+
+    it('should not create the color property', function() {
+      var mocha = new Mocha(opts);
+      mocha.useColors();
+      expect(mocha.options, 'not to have property', 'color');
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.useColors(), 'to be', mocha);
     });
   });
 
